@@ -14,3 +14,13 @@ wherever its destination was (usually the STDOUT and STDERR).
 of the command into a string.
 
 Source: http://unix.stackexchange.com/a/138498/106637
+
+2. If you need to repeat an action for all files in a directory (and its
+subdirectories), the best way to do it is to use the `find` command with the
+`-exec` option.
+    Find command finds all the files with the given requirements and passes each
+file name to the command given after the `-exec` option.
+    Example: Find all C files in the current directory and in subdirectories
+which do not use the 'math' library.
+    find . -name '*.c' -exec grep -v '^#include <math.h>' {} \;
+
