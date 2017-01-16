@@ -1,0 +1,16 @@
+1. Executing a shell script from another shell script _does not_ mean that the
+inner script is being executed in a _subshell_. This action (that is, executing
+a shell script from another shell script) is no different than executing, say,
+a Python command from the outer shell script.
+    The only way something (a command that is a shell script or a command that
+is something other (such as Python script, a binary, etc.)) gets executed in a
+subshell is to put the command between
+(command args)
+or
+$(command args)
+    The former form executes the command in a subshell and sends the output
+wherever its destination was (usually the STDOUT and STDERR).
+    The latter form executes the command in a subshell and captures the output
+of the command into a string.
+
+Source: http://unix.stackexchange.com/a/138498/106637
