@@ -1,0 +1,18 @@
+1. What is the difference between a subshelling a command and regular execution
+of a command?
+
+2. Is the only difference between executing something normally, vs executing
+something in a subshell that when you execute something in a subshell, shell
+variables (as well as environment variables) are copied to the process as
+well?
+  If that's the case, then there is no benefit in executing something other
+than a shell script in a subshell right? Because it is not possible to
+access to shell variables from something other than a shell. Or, is it the case
+that only actually it does not make sense to subshell something other than a
+shell script?
+
+3. Is it possible to alter the environment variables of a process from outside
+of that process?
+
+4. How to check if a variable is a shell variable, or an environment variable?
+

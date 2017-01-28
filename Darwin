@@ -1,3 +1,15 @@
-# Find all occurences of 'old' in all files in this directory and
-# subdirectories, and replace them with 'new'.
-find . -type f -exec sed -i '' 's/old/new/g' {} \;
+# Find all occurences of 'old_text' in all files in this directory and
+# subdirectories, and replace them with 'new_text'.
+find . -type f -exec sed -i '' 's/old_text/new_text/g' {} \;
+# Read from STDIN the characters entered and treat them as hexadecimal
+# characters. Write their corresponding byte values to a file named 'file'.
+# Example:
+#   xxd -r -p > xxd_output
+#   89504e470d0a1a0a
+#   <Press return and then ^D>
+#   file xxd_output
+#   <The output of this command will be: "PNG image data">
+xxd -r -p > file
+# Read a file (e.g, a log file) continously
+tail -F filename
+

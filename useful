@@ -1,0 +1,12 @@
+1. Compile and run xv6, a UNIX which is based on Sixth Edition UNIX. It is
+probably one of the the most beautiful codes you will come across.
+
+xv6 runs on x86. You can use QEMU to run it.
+
+For more information:
+https://pdos.csail.mit.edu/6.828/2016/xv6.html
+https://pdos.csail.mit.edu/6.828/2016/xv6.html#v6
+http://unix.stackexchange.com/a/266764/106637
+https://en.wikipedia.org/wiki/Exokernel
+https://en.wikipedia.org/wiki/Xv6
+

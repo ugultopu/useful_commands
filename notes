@@ -15,6 +15,7 @@ of the command into a string.
 
 Source: http://unix.stackexchange.com/a/138498/106637
 
+
 2. If you need to repeat an action for all files in a directory (and its
 subdirectories), the best way to do it is to use the `find` command with the
 `-exec` option.
@@ -24,3 +25,73 @@ file name to the command given after the `-exec` option.
 which do not use the 'math' library.
     find . -name '*.c' -exec grep -v '^#include <math.h>' {} \;
 
+
+3. 3 types of execution are:
+	a. Normal execution: This is calling a command regularly. A command is:
+		1. An executable program.
+		2. An interpreted program. An interpreted program is:
+			a. A Python script
+			b. A shell script
+			c. A perl script
+			d. An awk script
+			etc.
+			  In short, an interpreted program is a text file, which starts with
+			the
+			#!
+			characters on the 0th column of the 0th line. The text coming after
+			the #! characters specifies which interpreter program to use to
+			interpret the text in this interpreted file. An interpreter is
+			an executable.
+	b. Sourcing a shell script: This is not a generic execution method. This
+	works only for shell commands.
+	  This reads the file given as the argument - WHICH MUST BE A SHELL SCRIPT
+	(that is, which must be a text file that starts with
+	  #!/bin/sh
+	)
+	- and executes the commands located in this file, in the current shell.
+	  In other words, sourcing a shell script (you cannot source anything other
+	than a shell script. That is, if something can be sourced, that means that
+	something _is_ a shell script) is the same as:
+	  1. Opening that shell script (that is, opening the file).
+	  2. Copying all the content of the shell script.
+	  3. Closing the shell script (that is, closing the file).
+	  4. Pasting the copied commands to the current shell.
+	In other words, there is no such thing as:
+	  . python
+	(where 'python' is the Python executable). Because the argument of the
+	source command must be a FILE OF TYPE SHELL SCRIPT. The python executable
+	is not of type shell script. It is a binary executable program. Hence, it
+	makes no sense to source something other than a shell script.
+	Similarly, it makes no sense to source a Python script neither:
+	 . a_python_script.py
+	Because sourcing a file means to read the SHELL COMMANDS located in that
+	file and to execute them. Since what we are sourcing is not a file which
+	contains shell commands (in other words, what we are are sourcing is not
+	a SHELL SCRIPT), sourcing a Python script does not make sense neither.
+	Because the shell will treat the commands in that script as shell commands
+	and it will try to execute them as shell commands.
+
+4. Exporting has nothing do with the parent process, or other non-related
+processes. Exporting has to do with the child processes. That is:
+	Exported variables get passed on to child processes, not-exported variables
+do not.
+
+  What this means is the following: When you export a variable in a shell
+script, that variable becomes a member of that shell's (that is, that process')
+environment variables. Since the environment variables of any process are
+copied to a subprocess of the parent process, exported variables "become
+available" to child process. They "become available", because they don't
+actually become available to child processes. That is, every child process
+gets 'a copy' of the environment variables of their parent process' environment
+variables, at the time of forking.
+
+Source: http://superuser.com/a/153378/280695
+
+5. Environment variables are passed from the parent process to child process.
+That is, every process has their own copy of environment variables, and every
+process gets their initial set of environment variables from their parent
+process. That is, the initial set of environment variables of a process has is
+the _copy_ of the set of environment variables its parent had, at the time of
+creating (e.g, forking) the child process.
+
+Source: http://superuser.com/a/47897/280695
