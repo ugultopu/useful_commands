@@ -12,4 +12,21 @@ find . -type f -exec sed -i '' 's/old_text/new_text/g' {} \;
 xxd -r -p > file
 # Read a file (e.g, a log file) continously
 tail -F filename
-
+# Search for a text in 'src' subdirectory of all member directories of this
+# directory.
+grep -r 'text_to_search_for' */src
+# Note that this works not because of 'grep', but because of shell. That is,
+# */src is a _glob_ pattern. That is, */src is a glob pattern which is
+# (possibly) expanded to:
+project0/src
+project1/src
+project2/src
+project3/src
+# (assuming that the current directory contains subdirectories named
+# 'project0', 'project1', 'project2', 'project3', where each one of these
+# subdirectories contain a subdirectory named 'src'. Note that the current
+# directory may contain other subdirectories, which do not contain a
+# subdirectory named 'src' as well.)
+# If you would like to grep in a directory which may appear anywhere on the
+# path (e.g, project1/subdirectory/src), then AFAIK you must use `find` command
+# with '-exec' option for `grep`.
