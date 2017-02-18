@@ -1,6 +1,8 @@
+# -----------------------------------------------------------------------------
 # Find all occurences of 'old_text' in all files in this directory and
 # subdirectories, and replace them with 'new_text'.
 find . -type f -exec sed -i '' 's/old_text/new_text/g' {} \;
+# -----------------------------------------------------------------------------
 # Read from STDIN the characters entered and treat them as hexadecimal
 # characters. Write their corresponding byte values to a file named 'file'.
 # Example:
@@ -10,6 +12,57 @@ find . -type f -exec sed -i '' 's/old_text/new_text/g' {} \;
 #   file xxd_output
 #   <The output of this command will be: "PNG image data">
 xxd -r -p > file
-# Read a file (e.g, a log file) continously
+# -----------------------------------------------------------------------------
+# Read and display a file (e.g, a log file) continously
 tail -F filename
+# -----------------------------------------------------------------------------
+# Search for a text in 'src' subdirectory of all member directories of this
+# directory.
+grep -r 'text_to_search_for' */src
+# Note that this works not because of 'grep', but because of shell. That is,
+# */src is a _glob_ pattern. That is, */src is a glob pattern which is
+# (possibly) expanded to:
+project0/src
+project1/src
+project2/src
+project3/src
+# (assuming that the current directory contains subdirectories named
+# 'project0', 'project1', 'project2', 'project3', where each one of these
+# subdirectories contain a subdirectory named 'src'. Note that the current
+# directory may contain other subdirectories, which do not contain a
+# subdirectory named 'src' as well.)
+# If you would like to grep in a directory which may appear anywhere on the
+# path (e.g, project1/subdirectory/src), then AFAIK you must use `find` command
+# with '-exec' option for `grep`.
+# -----------------------------------------------------------------------------
+# A better version of the preceeding command is the following:
+find . -path "*src*" -type f -exec grep -Hn "text_to_search_for" {} +
+# What this command does is:
+# 1. Searches all files (by file, we mean a 'UNIX file'. That means:
+# - Regular files
+# - Directories
+# - Character files
+# - Block files
+# etc. )
+# in the current directory _recursively_. That is, it checks out _anything_
+# under this directory.
+# 2. It filters the files which contain the text "src" in their path. This
+# part comes from '-path "*src*"' argument.
+# 3. It filters the _regular files_. That is, directories, character files,
+# block files, etc. are _not_ included in the output. This part comes from
+# the '-type f' argument.
+# 4. It executes the following command, by passing _all_ output of the find
+# command to the end of the command. That is, it is effectively as if you
+# have written the following command:
+grep -Hn "text_to_search_for" 1st_found_filename 2nd_found_filename 3rd_found_filename ...
+# Note that the command could have been expressed as follows as well:
+find . -path "*src*" -type f -exec grep -Hn "text_to_search_for" {} \;
+# But this version is _extremely_ slow, compared to the other version. The
+# reason is because `grep` is invoked for every found file name, instead of
+# being invoked only once, with having all the file names as the argument.
+# That is, this version is effectively as if you have written:
+for filename in "$find_output"
+do
+    grep -Hn "text_to_search_for" "filename"
+done
 
