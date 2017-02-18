@@ -10,3 +10,8 @@ q(?!u)
   Match a 'q' _not_ followed by and 'u'.
 q(?=u)
   Match a 'q' followed by and 'u'.
+
+Non-capturing group: (?:)
+Matches the regex inside the group, however, does not make this group
+accessible by using backreferences such as \1, \2 etc.
+
