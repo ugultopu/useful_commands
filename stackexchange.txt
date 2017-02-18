@@ -1,3 +1,14 @@
+===============================================================================
 # Regex lookaround
-http://stackoverflow.com/questions/17015761/why-abcdef-is-not-matched-by-abcdef-but-matched-by-abc-def#answer-17015790
+------------------
+In `(?=abc)def` the `(?=abc)` capture is zero width, and  doesn't move the cursor forward in the input string following a successful match. That construct is simply saying look ahead at the next three characters to see if they are `abc`, if they are then check to see if those same characters are  `def`. At this point the match fails.
+
+You need to understand how the regex engine works to complete your match. Consider your input string `abcdef` and your regex `abc(?=def)`. The engine starts by matching the `a` then moves the cursor inside the input string over to the next character and attempts to match the `b` because the cursor in the input string is on `b` the match succeeds. Then the engine moves the cursor inside the input string over and attempts to match the `c` and because the cursor is in the input string is on a `c` the match succeeds and the cursor in the input string is again moved to the next character. Now the engine encounters the `(?=def)` at this point the engine just looks ahead to see if the next three characters from where the cursor is in the input sting are in fact `def` without moving the cursor, which they are and the match completes successfully.
+
+Now consider the input string `xyz` and a regex `x(?=y)Z`. The regex engine put the cursor on the first letter in the input string and checks to see it it is an `x` and finds that an `x` so it moves the cursor to the next character in the input string. Now it looks ahead to see if the next character is a `y`, which it is, but the engine doesn't move the input text cursor foreword so the cursor in the input text stays on the `y`. Next the engine looks to see if the cursor is on the letter `z`, but because the cursor in the input text is still on the letter `y` the match fails.
+
+You can read a lot more about both positive and negative lookaheads at http://www.regular-expressions.info/lookaround.html
+
+Source: http://stackoverflow.com/questions/17015761/why-abcdef-is-not-matched-by-abcdef-but-matched-by-abc-def#answer-17015790
+===============================================================================
 
