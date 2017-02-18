@@ -1,0 +1,12 @@
+Lookaround: (?)
+    Lookahead: (?)
+        Positive lookahead: (?=)
+        Negative lookahead: (?!)
+    Lookbehind: (?<)
+        Positive lookbehind: (?<=)
+        Negative lookbehind: (?<!)
+
+q(?!u)
+  Match a 'q' _not_ followed by and 'u'.
+q(?=u)
+  Match a 'q' followed by and 'u'.
