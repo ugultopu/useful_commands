@@ -1,0 +1,28 @@
+ As you know, everything in UNIX is user based. That is, every activity
+performed on a UNIX system is associated with a user. SSH is no exception to
+this.
+
+ When you SSH to a machine, you always SSH as a user. If you don't explicitly
+specify the user, SSH command assumes the username on the local system. For
+example, if your username is "a_username" and if you SSH as:
+    ssh 192.168.1.1
+this is equivalent to:
+    ssh a_username@192.168.1.1
+
+ Now, there are two important files in every user's home directory. These are:
+    ~/.ssh/authorized_keys
+    ~/.ssh/id_rsa
+
+ The former (~/.ssh/authorized_keys) is used when someone SSH'es to this
+machine as this user. The remote person presents a private key while SSH'ing,
+and if there is a public key in "~/.ssh/authorized_keys" (on the machine on
+which the SSH server runs) that corresponds to this private key, the remote
+user is granted access.
+
+ The latter (~/.ssh/id_rsa) is the private key of the user. It is used when
+SSH'ing to a remote machine which runs an SSH daemon (that is, 'sshd'). The
+local user presents this private key to the remote SSH server, and the SSH
+server checks if the user that is being SSH'ed to has specified the public
+key part of this private key in "~/.ssh/authorized_keys" file. If yes,
+access is granted to the remote user.
+
