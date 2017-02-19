@@ -1,0 +1,7 @@
+# Keys for GNU info
+Page Down: <SPACE>
+Page Up: <DELETE>
+Next Node: n
+Previous Node: p
+Quit: q
+
