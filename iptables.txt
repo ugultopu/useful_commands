@@ -1,0 +1,56 @@
+IPv4 packet filtering and NAT
+=============================
+- Manages the IPv4 packet filter _rule tables_ in the _Linux kernel_.
+- Each table consists of a number of built-in _chains_ and user-defined _chains_.
+- Each chain is a _list of rules_ which can match a set of packets.
+- Each _rule_ specifies what to do (the action to take) with a packet that matches.
+- This action is called a `target', which may be a jump to a user-defined chain
+_in the same table_.
+
+Rule Tables
+  List of Chains
+    List of Rules
+      Rule: Specifies the TARGET (the action to take) with a matching package.
+
+RULE
+====
+- Defines what kinds of packets match this rule.
+- What to do with a matching packet (the TARGET).
+
+  If a packet does not match, the next rule in the chain is examined.
+  If a packet matches, the next rule is specified by the value of the TARGET.
+The value of the target can be:
+  1. The name of a user-defined chain.
+  2. One of the `iptables-extensions' TARGETs.
+  3. One of ACCEPT, DROP or RETURN.
+
+ACCEPT: Let the packet through.
+DROP: Don't let the packet through.
+RETURN: Stop traversing this chain in the rule table and resume at the next
+rule in the previous (calling) chain.
+
+If the end of a built-in chain is reached
+OR
+A rule in a built in chain with target RETURN is matched, the target specified
+by the _chain policy_ determines the fate of the packet.
+
+There are currently 5 independent tables. Which tables are present at any time
+depends on the kernel configuration options and which kernel modules are present.
+
+The 5 rule tables are:
+ - filter
+ - nat
+ - mingle
+ - raw
+ - security
+
+  The _built-in chains_ in _tables_ represent the _netfilter hooks_ which trigger
+them. Chains determine _when_ the rules will be evaluated.
+
+  The names of the built-in chains mirror the names of the _netfilter hooks_
+they are associated with:
+  PREROUTING: Triggered by the NF_IP_PRE_ROUTING hook.
+  INPUT: Triggered by the NF_IP_LOCAL_IN hook.
+  FORWARD: Triggered by the NF_IP_FORWARD hook.
+  OUTPUT: Triggered by the NF_IP_LOCAL_OUT hook.
+  POSTROUTING: Triggered by the NF_IP_POST_ROUTING hook.
