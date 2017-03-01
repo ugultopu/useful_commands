@@ -87,4 +87,74 @@ server checks if the user that is being SSH'ed to has specified the public
 key part of this private key in "~/.ssh/authorized_keys" file. If yes,
 access is granted to the remote user.
 -------------------------------------------------------------------------------
+ssh-agent
+=========
+Each time you start a new shell process (as a result of a tty connection, or
+manually, or by other means), you have to:
+
+    1. Check if an `ssh-agent` process is currently alive.
+    2. If yes, you need to find the socket (this socket might be a Unix Domain
+Socket, or a BSD socket. I don't exactly know the details now.) of this
+`ssh-agent` process.
+    3. After finding the socket of this `ssh-agent` process, you need to set the
+        a. "SSH_AUTH_SOCK" environment variable to the path of this socket.
+        b. "SSH_AGENT_PID" environment variable to the PID of the running
+`ssh-agent` process.
+
+Each time a shell process terminates, you have to check if this is the last
+shell process of your user. If it is, you need to terminate the running
+`ssh-agent` process with
+
+    ssh-agent -k
+
+command. Normally, when you terminate the `ssh-agent` with this command, the
+socket located at:
+
+    /tmp/ssh-<random_string>/agent.<agent's_pid>
+
+which belongs to this `ssh-agent` process is removed. However, to make sure,
+you can remove all ssh agent sockets with:
+
+    find /tmp -path '*ssh*' -delete
+
+<NOTE>
+    I am not sure if removing _everything_ which contains "ssh" in its path
+under "/tmp" is really safe. I seems like so but I need to verify this.
+</NOTE>
+
+If an `ssh-agent` process is not running when you start a new shell process:
+
+    1. Clear all previous `ssh-agent` sockets under "/tmp" using:
+
+        find /tmp -path '*ssh*' -delete
+
+    2. Start a new `ssh-agent` process with command:
+
+        eval $(ssh-agent) > /dev/null
+
+In summary:
+    1. Check if an `ssh-agent` is running when you start a new shell process.
+If yes, add the path of the socket of the running `ssh-agent` to the
+"SSH_AUTH_SOCK" environment variable and the PID of the running `ssh-agent` to
+the "SSH_AGENT_PID" environment variable.
+    2. Upon terminating a shell process, check if this is the last shell
+process of your user. If yes, clear your `ssh-agent` sockets using the:
+
+    ssh-agent -k
+    find /tmp -path '*ssh*' -delete
+
+commands.
+    3. When you start a new shell process, if an `ssh-agent` is not already
+running, start a new one using the:
+
+    find /tmp -path '*ssh*' -delete
+    eval $(ssh-agent) > /dev/null
+
+Further information:
+    http://blog.joncairns.com/2013/12/understanding-ssh-agent-and-ssh-add/
+    https://github.com/wwalker/ssh-find-agent/blob/master/ssh-find-agent.sh
+    http://docstore.mik.ua/orelly/networking_2ndEd/ssh/ch06_03.htm
+    http://rabexc.org/posts/pitfalls-of-ssh-agents
+    https://www.safaribooksonline.com/library/view/linux-security-cookbook/0596003919/ch06s11.htm
+-------------------------------------------------------------------------------
 
