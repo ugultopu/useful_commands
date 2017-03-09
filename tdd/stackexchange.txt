@@ -1,0 +1,2 @@
+http://stackoverflow.com/questions/15494926/initialising-mock-objects-mockito
+
