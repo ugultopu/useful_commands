@@ -1,0 +1,5 @@
+-In YAML files (such as an Ansible playbook), if you use a text that is not
+within single or double quotes, then the interpreter treats that text as a
+variable name. Hence, if you want to use a string literal in a YAML file, you
+need to enclose that text in single or double quotes.
+
