@@ -1,0 +1,9 @@
+- If you get a weird error (that is, an error whose cause is not obvious at the
+  first look) while running a command, then the cause is _most probably_ about
+  insufficient permissions. Some of the examples to insufficient permissions
+  might be:
+  - The user who is trying to run the command does not have read, write or
+    execute permissions on the directory.
+  - The file system on which the file being manipulated by the command might be
+    read only.
+
