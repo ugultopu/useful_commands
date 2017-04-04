@@ -6,4 +6,8 @@
     execute permissions on the directory.
   - The file system on which the file being manipulated by the command might be
     read only.
+    A nice example to this is to try to target a host with read-only file
+    systems using Ansible. The error given by Ansible will not be very obvious
+at the first look (although you will realize that it gives you hints about
+permissions if you read carefully).
 
